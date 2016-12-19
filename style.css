@@ -1,0 +1,26 @@
+.calendar-container {
+    font-family: sans-serif;
+}
+.rc-cal-monthly{
+    display: flex;
+    flex-direction: row;
+    flex-flow: row wrap;
+}
+.rc-day{
+    width: 100px;
+    height: 100px;
+    border: 1px solid #eaeaea;
+    flex-basis: 14%;
+}
+
+.rc-date-btn {
+ display: inline-block;
+}
+.rc-date-btn button{
+    border-radius: 0;
+}
+
+.day-number {
+    float: right;
+    padding: 0 10px;
+}
