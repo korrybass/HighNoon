@@ -14,7 +14,7 @@ let getCalDatesOfPrevMonth = (date, range) => {
     let arr = [];
     let dateDiff = getDayOfWeek(date.date(1));
     for(let i = 0; i < dateDiff; ++i ){
-        arr.push(range);
+        arr.push({date: getPreviousMonth(date).date(range), day: range});
         range = range - 1;
     };
     return arr;
@@ -25,14 +25,14 @@ let getCalDatesOfNextMonth = (date) => {
     const dayOfWeek = getDayOfWeek(lastDay);
     let range = [];
     if(dayOfWeek !== 6){
-        for (var i = 0; i < 7 - getDayOfWeek(lastDay) -1; i++) { range.push(i+1); }
+        for (var i = 0; i < 7 - getDayOfWeek(lastDay) -1; i++) { range.push({date: getNextMonth(date).date(i+1), day: i+1} ); }
     }
     return range;
 };
 
-let buildMonthArray = (monthRange) => {
+let buildMonthArray = (date, monthRange) => {
     let range = [];
-    for (var i = 0; i < monthRange; i++) { range.push(i+1); }
+    for (var i = 0; i < monthRange; i++) {range.push({date: new moment(date).date(i+1), day: i+1}); }
     return range;
 };
 
@@ -40,7 +40,14 @@ let setMonthDatesView = (date) => {
     const previousMonthDateRange = numberOfDaysInMonth(getPreviousMonth(date));
     let prevMonthDates = getCalDatesOfPrevMonth(date, previousMonthDateRange);
     let nextMonthDates = getCalDatesOfNextMonth(moment(date));
-    return [...prevMonthDates.reverse(), ...buildMonthArray(numberOfDaysInMonth(date)), ...nextMonthDates];
+    return  {
+        dates: [...prevMonthDates.reverse(), ...buildMonthArray(date, numberOfDaysInMonth(date)), ...nextMonthDates],
+        meta: {
+            prevIdx: prevMonthDates.length - 1,
+            nextIdx: buildMonthArray(date, numberOfDaysInMonth(date)).length + prevMonthDates.length
+        }
+
+    }
 };
 
 export default {

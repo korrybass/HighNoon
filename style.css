@@ -24,3 +24,22 @@
     float: right;
     padding: 0 10px;
 }
+
+.next-month-day, .prev-month-day{
+    background-color: #f7f7f7;
+}
+
+.rc-event{
+    padding: 2px 6px;
+}
+.rc-event-time{
+    font-size: 10px;
+    font-weight: bold;
+}
+.rc-event-text{
+    font-size: 12px;
+}
+
+.next-month-day .day-number, .prev-month-day .day-number{
+    color: #afafaf;
+}
