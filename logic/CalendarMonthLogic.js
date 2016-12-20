@@ -9,6 +9,7 @@ let getPreviousMonth = (month) => {
 };
 let getNextMonth = (month) => new moment(month).add(1, 'months');
 
+
 let getCalDatesOfPrevMonth = (date, range) => {
     let arr = [];
     let dateDiff = getDayOfWeek(date.date(1));
