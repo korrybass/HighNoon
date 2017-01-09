@@ -41,7 +41,7 @@ gulp.task('lint', () => {
 		.pipe(eslint.failAfterError());
 });
 
-gulp.task('default', ['scripts', 'lint', 'watch']);
+gulp.task('default', ['scripts', 'watch']);
 
 function bundleApp(isProduction) {
 	scriptsCount++;
