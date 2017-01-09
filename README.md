@@ -1,4 +1,4 @@
-# es6-react-boilerplate
+# HighNoon Docs
 
 ## Install
 
