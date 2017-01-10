@@ -6,7 +6,6 @@ export default class CalendarContainer extends React.Component {
 
     constructor() {
         super();
-
         this.state = {
             calView: "month"
         };

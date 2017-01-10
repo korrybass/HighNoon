@@ -1,5 +1,6 @@
 import React from 'react';
 import Day from './Day/day';
+import Week from './Weekly/WeeklyView';
 import CalDateBtn from './nextBtn';
 import moment from 'moment';
 import calUtils from '../../../logic/CalendarMonthLogic';
@@ -99,7 +100,7 @@ export default class CalendarViewWrapper extends React.Component {
     getView(view){
         let viewObject = {
             day: <p>day view</p>,
-            week: <p>week view</p>,
+            week: <Week />,
             month: <div className="rc-cal-monthly">{this.state.displayDates}</div>
         };
         return viewObject[view];
