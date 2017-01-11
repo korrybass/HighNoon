@@ -15,8 +15,10 @@ export default class Week extends React.Component {
         }.bind(this));
     }
     buildWeeklyTimes (){
-        let timeDivs = ["12am", '1am', '2am', '3am', '4am', '5am', '6am', '7am', '8am', '9am', '10am', '11am',
-            '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', '9pm', '10pm', '11pm'];
+        let timeDivs = [
+            "12am", '1am', '2am', '3am', '4am', '5am', '6am', '7am', '8am', '9am', '10am', '11am',
+            '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', '9pm', '10pm', '11pm'
+        ];
         return timeDivs.map((x, idx) => {
             return <div className="rc-weekly-times" key={idx}><p className="rc-hourly-time"> {x}</p></div>;
         });
@@ -33,10 +35,23 @@ export default class Week extends React.Component {
     buildWeeklyDayCols (){
         let timeDivs = [];
         for (let i = 1; i <= 7; i++){
-            timeDivs.push(<td key={i} className="rc-weekly-day-col"></td>);
+            timeDivs.push(<td key={i} className="rc-weekly-day-col">
+                <div onClick={this.onDayColClick} className="rc-col-eventwrapper" style={{height: "1008px", marginBottom: "-1008px"}}>
+                    <div>
+
+                    </div>
+                </div>
+            </td>);
         }
         return timeDivs;
     }
+    onDayColClick (e){
+        console.log(e.target, e.pageX, e.target.offsetLeft, e.pageY, e.target.offsetTop);
+        let eventPosY = e.pageY - e.targetTop;
+
+        debugger
+    }
+
     render() {
         let viewHeight = {
             height: "400px"
