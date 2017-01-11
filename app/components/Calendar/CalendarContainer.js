@@ -1,13 +1,12 @@
 import React from 'react';
 import CalWrapper from './CalenderViewWrapper';
 
-
 export default class CalendarContainer extends React.Component {
 
     constructor() {
         super();
         this.state = {
-            calView: "month"
+            calView: "week"
         };
     }
 

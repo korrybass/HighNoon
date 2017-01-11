@@ -123,3 +123,54 @@ button{
     font-size: 14px;
     margin-left: 15px;
 }
+
+/*weekly*/
+.rc-weekly-table{
+    height: 1008px;
+    width: 100%;
+}
+.rc-weekly-times{
+    height: 42px;
+}
+.rc-weekly-table-wrapper{
+    overflow-y: auto;
+    border: 1px solid #eaeaea;
+}
+.rc-weekly-day-table{
+    width: 100%;
+    table-layout: fixed;
+}
+.rc-weekly-marker{
+    height: 42px;
+}
+.rc-dualmarker{
+    height: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px dotted #ddd;
+    border-top: 1px solid #ddd;
+    font-size: 1px;
+}
+
+.rc-hours-wrapper{
+    position: relative;
+}
+.rc-weekly-hoursmarker{
+    position: absolute;
+    width: 100%;
+}
+.rc-markercell{
+    height: 42px;
+}
+.rc-hourly-time{
+    margin: 0;
+    font-size: 12px;
+    text-align: right;
+}
+.rc-day-col{
+    font-size: 12px;
+    font-weight: bold;
+    padding-left: 5px;
+}
+.rc-weekly-day-col{
+    border-left: 1px solid #ddd;
+}
