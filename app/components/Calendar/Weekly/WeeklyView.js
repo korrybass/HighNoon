@@ -5,7 +5,9 @@ export default class Week extends React.Component {
     constructor() {
         super();
         this.state = {
-            viewHeight: "400px"
+            viewHeight: "400px",
+            newEvent: null,
+            eventDataSource: []
         };
     }
 
@@ -36,7 +38,7 @@ export default class Week extends React.Component {
         let timeDivs = [];
         for (let i = 1; i <= 7; i++){
             timeDivs.push(<td key={i} className="rc-weekly-day-col">
-                <div onClick={this.onDayColClick} className="rc-col-eventwrapper" style={{height: "1008px", marginBottom: "-1008px"}}>
+                <div  ref={"day-column"+i} onClick={(e) => { this.onDayColClick(e, "day-column"+i)}} className="rc-col-eventwrapper" style={{height: "1008px", marginBottom: "-1008px"}}>
                     <div>
 
                     </div>
@@ -45,12 +47,13 @@ export default class Week extends React.Component {
         }
         return timeDivs;
     }
-    onDayColClick (e){
-        console.log(e.target, e.pageX, e.target.offsetLeft, e.pageY, e.target.offsetTop);
-        let eventPosY = e.pageY - e.targetTop;
-
+    onDayColClick (e, ref){
+        console.log(e.target, e.pageX, e.target.offsetLeft, e.pageY, e.target.offsetTop, e.target.scrollTop);
+        let eventPosY = e.clientY - e.target.offsetTop + this.refs['weeklyWrapper'].scrollTop;
+        let elem = this.refs[ref];
         debugger
     }
+
 
     render() {
         let viewHeight = {
@@ -75,7 +78,7 @@ export default class Week extends React.Component {
                         </tbody>
                     </table>
                 </div>
-                <div style={viewHeight} className="rc-weekly-table-wrapper">
+                <div style={viewHeight} ref="weeklyWrapper" className="rc-weekly-table-wrapper">
                     <table  className="rc-weekly-table">
                         <tbody>
                         <tr height="1">
