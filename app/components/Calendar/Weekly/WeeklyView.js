@@ -53,8 +53,7 @@ export default class Week extends React.Component {
         let elem = this.refs[ref];
         debugger
     }
-
-
+    
     render() {
         let viewHeight = {
             height: "400px"
