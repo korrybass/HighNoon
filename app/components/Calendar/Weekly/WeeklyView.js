@@ -54,27 +54,24 @@ export default class Week extends React.Component {
         debugger
     }
 
-
     render() {
-        let viewHeight = {
-            height: "400px"
-        };
+        let viewHeight = { height: "400px" };
         return (
             <div className="rc-weekly-wrapper">
                 <div>
                     <table className="rc-weekly-day-table">
                         <tbody>
-                        <tr>
-                            <td style={{width: "60px"}}>&nbsp;</td>
-                            <td className="rc-day-col">Sun</td>
-                            <td className="rc-day-col">Mon</td>
-                            <td className="rc-day-col">Tues</td>
-                            <td className="rc-day-col">Wed</td>
-                            <td className="rc-day-col">Thur</td>
-                            <td className="rc-day-col">Fri</td>
-                            <td className="rc-day-col">Sat</td>
-                            <td style={{width: "10px"}}>&nbsp;</td>
-                        </tr>
+                            <tr>
+                                <td style={{width: "60px"}}>&nbsp;</td>
+                                <td className="rc-day-col">Sun</td>
+                                <td className="rc-day-col">Mon</td>
+                                <td className="rc-day-col">Tues</td>
+                                <td className="rc-day-col">Wed</td>
+                                <td className="rc-day-col">Thur</td>
+                                <td className="rc-day-col">Fri</td>
+                                <td className="rc-day-col">Sat</td>
+                                <td style={{width: "10px"}}>&nbsp;</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -95,13 +92,9 @@ export default class Week extends React.Component {
                         </tr>
                         <tr>
                             <td style={{width: "60px"}}>
-                                {this.buildWeeklyTimes().map(function (x) {
-                                    return x;
-                                })}
+                                {this.buildWeeklyTimes().map(function (x) { return x; })}
                             </td>
-                            {this.buildWeeklyDayCols().map(function (x) {
-                                return x;
-                            })}
+                            {this.buildWeeklyDayCols().map(function (x) { return x; })}
                         </tr>
                         </tbody>
                     </table>
