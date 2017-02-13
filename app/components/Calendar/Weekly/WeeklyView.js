@@ -1,5 +1,5 @@
 import React from 'react';
-
+import {timeDivMap } from './timeMap';
 export default class Week extends React.Component {
 
     constructor() {
@@ -7,7 +7,8 @@ export default class Week extends React.Component {
         this.state = {
             viewHeight: "400px",
             newEvent: null,
-            eventDataSource: []
+            eventDataSource: [],
+            newEvents: []
         };
     }
 
@@ -17,13 +18,14 @@ export default class Week extends React.Component {
         }.bind(this));
     }
     buildWeeklyTimes (){
-        let timeDivs = [
-            "12am", '1am', '2am', '3am', '4am', '5am', '6am', '7am', '8am', '9am', '10am', '11am',
-            '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', '9pm', '10pm', '11pm'
-        ];
-        return timeDivs.map((x, idx) => {
+        return timeDivMap.map((x, idx) => {
             return <div className="rc-weekly-times" key={idx}><p className="rc-hourly-time"> {x}</p></div>;
         });
+    }
+
+    findEventPosition (hour){
+        
+        return hourIndex * 21;
     }
     buildWeeklySlots (){
         let timeDivs = [];
@@ -38,9 +40,9 @@ export default class Week extends React.Component {
         let timeDivs = [];
         for (let i = 1; i <= 7; i++){
             timeDivs.push(<td key={i} className="rc-weekly-day-col">
-                <div  ref={"day-column"+i} onClick={(e) => { this.onDayColClick(e, "day-column"+i)}} className="rc-col-eventwrapper" style={{height: "1008px", marginBottom: "-1008px"}}>
+                <div  ref={"day-column"+i} onClick={(e) => { this.onDayColClick(e, i)}} className="rc-col-eventwrapper" style={{height: "1008px", marginBottom: "-1008px"}}>
                     <div>
-
+                        Test time
                     </div>
                 </div>
             </td>);
@@ -48,10 +50,13 @@ export default class Week extends React.Component {
         return timeDivs;
     }
     onDayColClick (e, ref){
-        console.log(e.target, e.pageX, e.target.offsetLeft, e.pageY, e.target.offsetTop, e.target.scrollTop);
+
+        console.log(ref, this.refs);
         let eventPosY = e.clientY - e.target.offsetTop + this.refs['weeklyWrapper'].scrollTop;
         let elem = this.refs[ref];
-        debugger
+        let nearestMultiple = Math.round(eventPosY / 21) * 21;
+        let events = [...this.state.newEvents, {start: null, position: nearestMultiple}];
+        this.setState({newEvents: events});
     }
 
     render() {
