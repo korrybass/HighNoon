@@ -58,7 +58,7 @@ export default class Week extends React.Component {
         let events = [...this.state.newEvents, {start: null, position: nearestMultiple}];
         this.setState({newEvents: events});
     }
-
+    
     render() {
         let viewHeight = { height: "400px" };
         return (
