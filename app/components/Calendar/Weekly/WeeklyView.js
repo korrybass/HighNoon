@@ -1,5 +1,16 @@
 import React from 'react';
 import {timeDivMap } from './timeMap';
+import moment from 'moment';
+
+const mockTimes = [
+    {
+        start: moment(),
+        end: moment().add(30, "minutes")
+    }
+];
+
+console.log('mock times', mockTimes);
+
 export default class Week extends React.Component {
 
     constructor() {
