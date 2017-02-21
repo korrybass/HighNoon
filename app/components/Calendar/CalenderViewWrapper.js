@@ -107,7 +107,6 @@ export default class CalendarViewWrapper extends React.Component {
 
     render() {
         let view = this.getView(this.props.options.view);
-        console.log(this.state);
         return (
             <div className="calendar-container">
                 <p>Calendar</p>

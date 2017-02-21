@@ -1,5 +1,5 @@
 import React from 'react';
-
+import {timeDivMap } from './timeMap';
 export default class Week extends React.Component {
 
     constructor() {
@@ -8,7 +8,7 @@ export default class Week extends React.Component {
             viewHeight: "400px",
             newEvent: null,
             eventDataSource: [],
-            eventList: []
+            newEvents: []
         };
     }
 
@@ -25,13 +25,14 @@ export default class Week extends React.Component {
         }.bind(this));
     }
     buildWeeklyTimes (){
-        let timeDivs = [
-            "12am", '1am', '2am', '3am', '4am', '5am', '6am', '7am', '8am', '9am', '10am', '11am',
-            '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', '9pm', '10pm', '11pm'
-        ];
-        return timeDivs.map((x, idx) => {
+        return timeDivMap.map((x, idx) => {
             return <div className="rc-weekly-times" key={idx}><p className="rc-hourly-time"> {x}</p></div>;
         });
+    }
+
+    findEventPosition (hour){
+        
+        return hourIndex * 21;
     }
     buildWeeklySlots (){
         let timeDivs = [];
@@ -46,54 +47,44 @@ export default class Week extends React.Component {
         let timeDivs = [];
         for (let i = 1; i <= 7; i++){
             timeDivs.push(<td key={i} className="rc-weekly-day-col">
-                <div  ref={"day-column"+i} onClick={(e) => { this.onDayColClick(e, "day-column"+i)}} className="rc-col-eventwrapper" style={{height: "1008px", marginBottom: "-1008px"}}>
-                        {this.state.eventList.map(function (x, idx) {
-                            if(x.col === "day-column"+i){
-                                return <span key={idx}>x.event.text</span>;
-                            }
-                        })}
+                <div  ref={"day-column"+i} onClick={(e) => { this.onDayColClick(e, i)}} className="rc-col-eventwrapper" style={{height: "1008px", marginBottom: "-1008px"}}>
+                    <div>
+                        Test time
+                    </div>
                 </div>
             </td>);
         }
         return timeDivs;
     }
     onDayColClick (e, ref){
-        console.log(e.target, e.pageX, e.target.offsetLeft, e.pageY, e.target.offsetTop, e.target.scrollTop);
+
+        console.log(ref, this.refs);
         let eventPosY = e.clientY - e.target.offsetTop + this.refs['weeklyWrapper'].scrollTop;
         let elem = this.refs[ref];
-        let copyList = this.state.eventList.slice();
-        copyList.push({
-            col: ref,
-            position: this.getPosition(eventPosY),
-            event: {text: 'testing text'}
-        });
-        console.log(copyList);
-        this.setState({eventList: copyList});
+
+        let nearestMultiple = Math.round(eventPosY / 21) * 21;
+        let events = [...this.state.newEvents, {start: null, position: nearestMultiple}];
+        this.setState({newEvents: events});
     }
     
     render() {
-
-        console.log(this.state);
-
-        let viewHeight = {
-            height: "400px"
-        };
+        let viewHeight = { height: "400px" };
         return (
             <div className="rc-weekly-wrapper">
                 <div>
                     <table className="rc-weekly-day-table">
                         <tbody>
-                        <tr>
-                            <td style={{width: "60px"}}>&nbsp;</td>
-                            <td className="rc-day-col">Sun</td>
-                            <td className="rc-day-col">Mon</td>
-                            <td className="rc-day-col">Tues</td>
-                            <td className="rc-day-col">Wed</td>
-                            <td className="rc-day-col">Thur</td>
-                            <td className="rc-day-col">Fri</td>
-                            <td className="rc-day-col">Sat</td>
-                            <td style={{width: "10px"}}>&nbsp;</td>
-                        </tr>
+                            <tr>
+                                <td style={{width: "60px"}}>&nbsp;</td>
+                                <td className="rc-day-col">Sun</td>
+                                <td className="rc-day-col">Mon</td>
+                                <td className="rc-day-col">Tues</td>
+                                <td className="rc-day-col">Wed</td>
+                                <td className="rc-day-col">Thur</td>
+                                <td className="rc-day-col">Fri</td>
+                                <td className="rc-day-col">Sat</td>
+                                <td style={{width: "10px"}}>&nbsp;</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -114,13 +105,9 @@ export default class Week extends React.Component {
                         </tr>
                         <tr>
                             <td style={{width: "60px"}}>
-                                {this.buildWeeklyTimes().map(function (x) {
-                                    return x;
-                                })}
+                                {this.buildWeeklyTimes().map(function (x) { return x; })}
                             </td>
-                            {this.buildWeeklyDayCols().map(function (x) {
-                                return x;
-                            })}
+                            {this.buildWeeklyDayCols().map(function (x) { return x; })}
                         </tr>
                         </tbody>
                     </table>
