@@ -23,6 +23,13 @@ export default class Week extends React.Component {
         };
     }
 
+    getPosition (xPos){
+        let x = Math.floor(xPos / 1010 * 100);
+        return x;
+        //return (x % 5) >= 5 ? parseInt(x / 5) * 5 + 5 : parseInt(x / 5) * 5
+        //return Math.ceil(percentage/5)*5;
+    }
+
     componentDidMount (){
         window.addEventListener("resize", function () {
             console.log('resizing', this);
@@ -65,6 +72,7 @@ export default class Week extends React.Component {
         console.log(ref, this.refs);
         let eventPosY = e.clientY - e.target.offsetTop + this.refs['weeklyWrapper'].scrollTop;
         let elem = this.refs[ref];
+
         let nearestMultiple = Math.round(eventPosY / 21) * 21;
         let events = [...this.state.newEvents, {start: null, position: nearestMultiple}];
         this.setState({newEvents: events});
