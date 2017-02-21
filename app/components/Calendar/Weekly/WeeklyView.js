@@ -7,8 +7,16 @@ export default class Week extends React.Component {
         this.state = {
             viewHeight: "400px",
             newEvent: null,
-            eventDataSource: []
+            eventDataSource: [],
+            eventList: []
         };
+    }
+
+    getPosition (xPos){
+        let x = Math.floor(xPos / 1010 * 100);
+        return x;
+        //return (x % 5) >= 5 ? parseInt(x / 5) * 5 + 5 : parseInt(x / 5) * 5
+        //return Math.ceil(percentage/5)*5;
     }
 
     componentDidMount (){
@@ -39,9 +47,11 @@ export default class Week extends React.Component {
         for (let i = 1; i <= 7; i++){
             timeDivs.push(<td key={i} className="rc-weekly-day-col">
                 <div  ref={"day-column"+i} onClick={(e) => { this.onDayColClick(e, "day-column"+i)}} className="rc-col-eventwrapper" style={{height: "1008px", marginBottom: "-1008px"}}>
-                    <div>
-
-                    </div>
+                        {this.state.eventList.map(function (x, idx) {
+                            if(x.col === "day-column"+i){
+                                return <span key={idx}>x.event.text</span>;
+                            }
+                        })}
                 </div>
             </td>);
         }
@@ -51,10 +61,20 @@ export default class Week extends React.Component {
         console.log(e.target, e.pageX, e.target.offsetLeft, e.pageY, e.target.offsetTop, e.target.scrollTop);
         let eventPosY = e.clientY - e.target.offsetTop + this.refs['weeklyWrapper'].scrollTop;
         let elem = this.refs[ref];
-        debugger
+        let copyList = this.state.eventList.slice();
+        copyList.push({
+            col: ref,
+            position: this.getPosition(eventPosY),
+            event: {text: 'testing text'}
+        });
+        console.log(copyList);
+        this.setState({eventList: copyList});
     }
     
     render() {
+
+        console.log(this.state);
+
         let viewHeight = {
             height: "400px"
         };

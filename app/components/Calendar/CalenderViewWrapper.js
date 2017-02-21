@@ -15,7 +15,6 @@ export default class CalendarViewWrapper extends React.Component {
         this.state = {
             currentMonth: moment(),
             displayDates: [],
-            displayView: 'month',
             currentDragElement: null,
             eventSource: events
         };
@@ -115,7 +114,7 @@ export default class CalendarViewWrapper extends React.Component {
                 <div className="calendar-header center-align-flex-row">
 
                     <div className="calendar-btns center-align-flex-row">
-                        <CalDateBtn text="<" buttonClass="rc-prev-btn rc-date-btn" action={this.goToPrevMonth.bind(this)} />
+                        <CalDateBtn  buttonClass="rc-prev-btn rc-arrow-left rc-date-btn" action={this.goToPrevMonth.bind(this)} />
                         <CalDateBtn text=">" buttonClass="rc-next-btn rc-date-btn" action={this.goToNextMonth.bind(this)} />
                         <h2 className="monthTitle">{this.state.currentMonth.format("MMMM")} <span>{this.state.currentMonth.year()}</span></h2>
                     </div>
