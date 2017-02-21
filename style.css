@@ -190,3 +190,13 @@ button{
     border-color: transparent #dd4397 transparent transparent;
     position: absolute;
 }
+
+.rc-weekly-event{
+    position: absolute;
+    margin: 0;
+    font-size: 12px;    
+    
+}
+.rc-weekly-event .title{
+    margin: 0;
+}
