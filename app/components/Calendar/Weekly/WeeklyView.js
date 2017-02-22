@@ -4,8 +4,8 @@ import moment from 'moment';
 
 const mockTimes = [
     {
-        start: moment().add(27, 'minutes'),
-        end: moment().add(30, "minutes"),
+        start: moment(),
+        end: moment().minute(30),
         title: "Time of schedule" 
     },
     {
@@ -42,6 +42,29 @@ export default class Week extends React.Component {
             }
         })
     };
+    getWeeklyDates (){
+        let start = this.props.start || moment().startOf('isoWeek');
+        let endDate = moment(this.props.start).endOf('isoWeek');
+        let firstDate = (start.date() === 1) ? start.date() : start.date()-1;
+        let limit = firstDate + 6;
+        let dateArr = [];
+
+        let numberOfDays = moment(start).daysInMonth();
+        for (let i = firstDate; i <= limit; i++){ dateArr.push(i); }
+        if(dateArr.indexOf(numberOfDays) === -1){
+            dateArr = dateArr.map((x) => {
+                return {month: start.month() + 1, date: x};
+            })
+        }
+        else{
+            let startHead = dateArr.slice(0, dateArr.indexOf(numberOfDays)+1);
+            startHead = startHead.map((x) => { return {month: start.month() + 1, date: x} })
+            let tailLength = dateArr.slice(dateArr.indexOf(numberOfDays)+1);
+            tailLength = tailLength.map((x, idx) => { return {month: endDate.month() + 1, date: idx+1} })
+            dateArr = [...startHead, ...tailLength];
+        }
+      return dateArr;
+    }
 
     getPosition (xPos){
         let x = Math.floor(xPos / 1010 * 100);
@@ -75,6 +98,7 @@ export default class Week extends React.Component {
     }
     buildWeeklyDayCols (){
         let timeDivs = [];
+        let dayClass;
         for (let i = 1; i <= 7; i++){
             timeDivs.push(<td key={i} className="rc-weekly-day-col">
                 <div  ref={"day-column"+i} onClick={(e) => { this.onDayColClick(e, i)}} className="rc-col-eventwrapper" style={{height: "1008px", marginBottom: "-1008px"}}>
@@ -94,6 +118,7 @@ export default class Week extends React.Component {
     
     render() {
         let viewHeight = { height: "400px" };
+        let dates = this.getWeeklyDates();
         return (
             <div className="rc-weekly-wrapper">
                 <div>
@@ -101,13 +126,13 @@ export default class Week extends React.Component {
                         <tbody>
                             <tr>
                                 <td style={{width: "60px"}}>&nbsp;</td>
-                                <td className="rc-day-col">Sun</td>
-                                <td className="rc-day-col">Mon</td>
-                                <td className="rc-day-col">Tues</td>
-                                <td className="rc-day-col">Wed</td>
-                                <td className="rc-day-col">Thur</td>
-                                <td className="rc-day-col">Fri</td>
-                                <td className="rc-day-col">Sat</td>
+                                <td className="rc-day-col">Sun {dates[0].month}/{dates[0].date}</td>
+                                <td className="rc-day-col">Mon {dates[1].month}/{dates[1].date}</td>
+                                <td className="rc-day-col">Tues {dates[2].month}/{dates[2].date}</td>
+                                <td className="rc-day-col">Wed {dates[3].month}/{dates[3].date}</td>
+                                <td className="rc-day-col">Thur {dates[4].month}/{dates[4].date}</td>
+                                <td className="rc-day-col">Fri {dates[5].month}/{dates[5].date}</td>
+                                <td className="rc-day-col">Sat {dates[6].month}/{dates[6].date}</td>
                                 <td style={{width: "10px"}}>&nbsp;</td>
                             </tr>
                         </tbody>

@@ -42,8 +42,11 @@
 }
 
 .rc-today{
-    background-color: #f7f7f7;
     border: 1px solid black;
+}
+
+.rc-today, .rc-today-weekly{
+    background-color: rgba(243, 243, 243, 0.5);
 }
 
 .day-number {
@@ -186,7 +189,7 @@ button{
 .rc-arrow-left:before{
     content: "\A";
     border-style: solid;
-    border-width: 10px 15px 10px 0;
+    border-width: 4px 6px 4px 0;
     border-color: transparent #dd4397 transparent transparent;
     position: absolute;
 }
@@ -195,7 +198,11 @@ button{
     position: absolute;
     margin: 0;
     font-size: 12px;    
-    
+    overflow: hidden;
+    width: 100%;
+    white-space: nowrap;
+    border: 1px solid #A1DBB2;
+    background-color: #e1f8e8;
 }
 .rc-weekly-event .title{
     margin: 0;
