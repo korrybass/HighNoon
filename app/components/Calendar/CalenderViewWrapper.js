@@ -14,6 +14,7 @@ export default class CalendarViewWrapper extends React.Component {
 
         this.state = {
             currentMonth: moment(),
+            currentWeek: moment().startOf('isoWeek'),
             displayDates: [],
             currentDragElement: null,
             eventSource: events
@@ -104,9 +105,28 @@ export default class CalendarViewWrapper extends React.Component {
         };
         return viewObject[view];
     }
+    formatHeaderDate (){
+        switch(this.props.options.view){
+            case 'day': 
+            break;
+            case 'week':
+                let start = moment(this.state.currentWeek);
+                let firstDate = start.date()-1;
+                let limit = firstDate + 6;
+                let dateArr = [];
+                for (let i = firstDate; i <= limit; i++){ dateArr.push(i); }
+                return <span>{this.state.currentMonth.format("MMM")} {dateArr[0]}-{dateArr[dateArr.length-1]}</span>;
+            case 'month':
+                return <span>{this.state.currentMonth.format("MMMM")} <span>{this.state.currentMonth.year()}</span></span>;
+        }
+    }
 
     render() {
         let view = this.getView(this.props.options.view);
+        let dateHeaderFormat = this.formatHeaderDate();
+        //---------
+        //create a component for the header of the calendar
+        //--------------------------
         return (
             <div className="calendar-container">
                 <p>Calendar</p>
@@ -115,7 +135,7 @@ export default class CalendarViewWrapper extends React.Component {
                     <div className="calendar-btns center-align-flex-row">
                         <CalDateBtn  buttonClass="rc-prev-btn rc-arrow-left rc-date-btn" action={this.goToPrevMonth.bind(this)} />
                         <CalDateBtn text=">" buttonClass="rc-next-btn rc-date-btn" action={this.goToNextMonth.bind(this)} />
-                        <h2 className="monthTitle">{this.state.currentMonth.format("MMMM")} <span>{this.state.currentMonth.year()}</span></h2>
+                        <h2 className="monthTitle">{dateHeaderFormat}</h2>
                     </div>
                     <div className="right-align-flex-row">
                         <button onClick={() => this.props.viewAction("day") }>Day</button>

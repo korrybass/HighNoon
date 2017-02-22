@@ -42,6 +42,15 @@ export default class Week extends React.Component {
             }
         })
     };
+    getWeeklyDates (){
+      //Current Week
+      let start = moment().startOf('isoWeek');
+      let firstDate = start.date()-1;
+      let limit = firstDate + 6;
+      let dateArr = [];
+      for (let i = firstDate; i <= limit; i++){ dateArr.push(i); }
+      return {dates: dateArr, month: start.month() + 1};
+    }
 
     getPosition (xPos){
         let x = Math.floor(xPos / 1010 * 100);
@@ -75,6 +84,7 @@ export default class Week extends React.Component {
     }
     buildWeeklyDayCols (){
         let timeDivs = [];
+        let dayClass;
         for (let i = 1; i <= 7; i++){
             timeDivs.push(<td key={i} className="rc-weekly-day-col">
                 <div  ref={"day-column"+i} onClick={(e) => { this.onDayColClick(e, i)}} className="rc-col-eventwrapper" style={{height: "1008px", marginBottom: "-1008px"}}>
@@ -94,6 +104,7 @@ export default class Week extends React.Component {
     
     render() {
         let viewHeight = { height: "400px" };
+        let dates = this.getWeeklyDates();
         return (
             <div className="rc-weekly-wrapper">
                 <div>
@@ -101,13 +112,13 @@ export default class Week extends React.Component {
                         <tbody>
                             <tr>
                                 <td style={{width: "60px"}}>&nbsp;</td>
-                                <td className="rc-day-col">Sun</td>
-                                <td className="rc-day-col">Mon</td>
-                                <td className="rc-day-col">Tues</td>
-                                <td className="rc-day-col">Wed</td>
-                                <td className="rc-day-col">Thur</td>
-                                <td className="rc-day-col">Fri</td>
-                                <td className="rc-day-col">Sat</td>
+                                <td className="rc-day-col">Sun {dates.month}/{dates.dates[0]}</td>
+                                <td className="rc-day-col">Mon {dates.month}/{dates.dates[1]}</td>
+                                <td className="rc-day-col">Tues {dates.month}/{dates.dates[2]}</td>
+                                <td className="rc-day-col">Wed {dates.month}/{dates.dates[3]}</td>
+                                <td className="rc-day-col">Thur {dates.month}/{dates.dates[4]}</td>
+                                <td className="rc-day-col">Fri {dates.month}/{dates.dates[5]}</td>
+                                <td className="rc-day-col">Sat {dates.month}/{dates.dates[6]}</td>
                                 <td style={{width: "10px"}}>&nbsp;</td>
                             </tr>
                         </tbody>

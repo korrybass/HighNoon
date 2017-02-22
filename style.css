@@ -42,8 +42,11 @@
 }
 
 .rc-today{
-    background-color: #f7f7f7;
     border: 1px solid black;
+}
+
+.rc-today, .rc-today-weekly{
+    background-color: rgba(243, 243, 243, 0.5);
 }
 
 .day-number {
