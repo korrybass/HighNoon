@@ -110,12 +110,18 @@ export default class CalendarViewWrapper extends React.Component {
             case 'day': 
             break;
             case 'week':
-                let start = moment(this.state.currentWeek);
-                let firstDate = start.date()-1;
-                let limit = firstDate + 6;
+                let start = this.state.currentWeek || moment().startOf('isoWeek');
+                let endDate = moment(this.state.currentWeek ).endOf('isoWeek');
+                let firstDate = (start.date() === 1) ? start.date() : start.date()-1;
                 let dateArr = [];
-                for (let i = firstDate; i <= limit; i++){ dateArr.push(i); }
-                return <span>{this.state.currentMonth.format("MMM")} {dateArr[0]}-{dateArr[dateArr.length-1]}</span>;
+                let numberOfDays = moment(start).daysInMonth();
+                for (let i = firstDate; i <= firstDate + 6; i++){ dateArr.push(i); }
+                if(dateArr.indexOf(numberOfDays) === -1){
+                    return <span>{this.state.currentWeek.format("MMM")} {dateArr[0]} &#8212; {dateArr[dateArr.length-1]}</span>;                    
+                }
+                else{
+                    return <span>{this.state.currentWeek.format("MMM")} {dateArr[0]} &#8212; { endDate.format("MMM") } { endDate.date() }</span>;   
+                }
             case 'month':
                 return <span>{this.state.currentMonth.format("MMMM")} <span>{this.state.currentMonth.year()}</span></span>;
         }
@@ -128,12 +134,18 @@ export default class CalendarViewWrapper extends React.Component {
         })
     }
 
+    goToPrevWeek () {
+        let start = moment(this.state.currentWeek).subtract(1, 'weeks').startOf('isoWeek');
+        this.setState({
+            currentWeek: start
+        })
+    }
     headerNavigation (type){
         var actions = {
             day: {},
             week: {
                 next: this.goToNextWeek.bind(this),
-                prev: () => {},
+                prev: this.goToPrevWeek.bind(this),
             },
             month: {
                 next: this.goToNextMonth.bind(this),
