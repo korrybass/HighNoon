@@ -6,8 +6,12 @@ export default class CalendarContainer extends React.Component {
     constructor() {
         super();
         this.state = {
-            calView: "week"
+            calView: ""
         };
+    }
+
+    componentWillMount(){
+        this.setState({calView: this.props.options.dailyView || "month"});
     }
 
     changeView (view){
