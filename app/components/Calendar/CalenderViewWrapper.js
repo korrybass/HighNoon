@@ -100,7 +100,7 @@ export default class CalendarViewWrapper extends React.Component {
     getView(view){
         let viewObject = {
             day: <p>day view</p>,
-            week: <Week />,
+            week: <Week start={this.state.currentWeek} />,
             month: <div className="rc-cal-monthly">{this.state.displayDates}</div>
         };
         return viewObject[view];
@@ -121,6 +121,28 @@ export default class CalendarViewWrapper extends React.Component {
         }
     }
 
+    goToNextWeek () {
+        let start = moment(this.state.currentWeek).add(1, 'weeks').startOf('isoWeek');
+        this.setState({
+            currentWeek: start
+        })
+    }
+
+    headerNavigation (type){
+        var actions = {
+            day: {},
+            week: {
+                next: this.goToNextWeek.bind(this),
+                prev: () => {},
+            },
+            month: {
+                next: this.goToNextMonth.bind(this),
+                prev: this.goToPrevMonth.bind(this)
+            }
+        }
+        return actions[type];
+    }
+
     render() {
         let view = this.getView(this.props.options.view);
         let dateHeaderFormat = this.formatHeaderDate();
@@ -133,8 +155,10 @@ export default class CalendarViewWrapper extends React.Component {
                 <div className="calendar-header center-align-flex-row">
 
                     <div className="calendar-btns center-align-flex-row">
-                        <CalDateBtn  buttonClass="rc-prev-btn rc-arrow-left rc-date-btn" action={this.goToPrevMonth.bind(this)} />
-                        <CalDateBtn text=">" buttonClass="rc-next-btn rc-date-btn" action={this.goToNextMonth.bind(this)} />
+                        <CalDateBtn  buttonClass="rc-prev-btn rc-arrow-left rc-date-btn" 
+                                     action={() => { this.headerNavigation(this.props.options.view).prev() }} />
+                        <CalDateBtn text=">" buttonClass="rc-next-btn rc-date-btn" 
+                                             action={() => { this.headerNavigation(this.props.options.view).next() }} />
                         <h2 className="monthTitle">{dateHeaderFormat}</h2>
                     </div>
                     <div className="right-align-flex-row">

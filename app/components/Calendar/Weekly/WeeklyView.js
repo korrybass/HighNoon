@@ -4,8 +4,8 @@ import moment from 'moment';
 
 const mockTimes = [
     {
-        start: moment().add(27, 'minutes'),
-        end: moment().add(30, "minutes"),
+        start: moment(),
+        end: moment().minute(30),
         title: "Time of schedule" 
     },
     {
@@ -44,7 +44,8 @@ export default class Week extends React.Component {
     };
     getWeeklyDates (){
       //Current Week
-      let start = moment().startOf('isoWeek');
+      let start = this.props.start || moment().startOf('isoWeek');
+      debugger
       let firstDate = start.date()-1;
       let limit = firstDate + 6;
       let dateArr = [];
