@@ -14,6 +14,7 @@ export default class CalendarViewWrapper extends React.Component {
 
         this.state = {
             currentMonth: moment(),
+            currentWeek: moment().startOf('isoWeek'),
             displayDates: [],
             currentDragElement: null,
             eventSource: events
@@ -99,23 +100,82 @@ export default class CalendarViewWrapper extends React.Component {
     getView(view){
         let viewObject = {
             day: <p>day view</p>,
-            week: <Week />,
+            week: <Week start={this.state.currentWeek} />,
             month: <div className="rc-cal-monthly">{this.state.displayDates}</div>
         };
         return viewObject[view];
     }
+    formatHeaderDate (){
+        switch(this.props.options.view){
+            case 'day': 
+            break;
+            case 'week':
+                let start = this.state.currentWeek || moment().startOf('isoWeek');
+                let endDate = moment(this.state.currentWeek ).endOf('isoWeek');
+                let firstDate = (start.date() === 1) ? start.date() : start.date()-1;
+                let dateArr = [];
+                let numberOfDays = moment(start).daysInMonth();
+                for (let i = firstDate; i <= firstDate + 6; i++){ dateArr.push(i); }
+                if(dateArr.indexOf(numberOfDays) === -1){
+                    return <span>{this.state.currentWeek.format("MMM")} {dateArr[0]} &#8212; {dateArr[dateArr.length-1]}, {this.state.currentWeek.format("YYYY")}</span>;                    
+                }
+                else{
+                    if(this.state.currentWeek.format("YYYY") !== endDate.format("YYYY")){
+                        return <span>{this.state.currentWeek.format("MMM")} {dateArr[0]}, {this.state.currentWeek.format("YYYY")} &#8212; { endDate.format("MMM") } { endDate.date() }, {endDate.format("YYYY")} </span>;   
+                    }else{
+                        return <span>{this.state.currentWeek.format("MMM")} {dateArr[0]} &#8212; { endDate.format("MMM") } { endDate.date() }, {this.state.currentWeek.format("YYYY")} </span>;                           
+                    }
+                }
+            case 'month':
+                return <span>{this.state.currentMonth.format("MMMM")} <span>{this.state.currentMonth.year()}</span></span>;
+        }
+    }
+
+    goToNextWeek () {
+        let start = moment(this.state.currentWeek).add(1, 'weeks').startOf('isoWeek');
+        this.setState({
+            currentWeek: start
+        })
+    }
+
+    goToPrevWeek () {
+        let start = moment(this.state.currentWeek).subtract(1, 'weeks').startOf('isoWeek');
+        this.setState({
+            currentWeek: start
+        })
+    }
+    headerNavigation (type){
+        var actions = {
+            day: {},
+            week: {
+                next: this.goToNextWeek.bind(this),
+                prev: this.goToPrevWeek.bind(this),
+            },
+            month: {
+                next: this.goToNextMonth.bind(this),
+                prev: this.goToPrevMonth.bind(this)
+            }
+        }
+        return actions[type];
+    }
 
     render() {
         let view = this.getView(this.props.options.view);
+        let dateHeaderFormat = this.formatHeaderDate();
+        //---------
+        //create a component for the header of the calendar
+        //--------------------------
         return (
             <div className="calendar-container">
                 <p>Calendar</p>
                 <div className="calendar-header center-align-flex-row">
 
                     <div className="calendar-btns center-align-flex-row">
-                        <CalDateBtn  buttonClass="rc-prev-btn rc-arrow-left rc-date-btn" action={this.goToPrevMonth.bind(this)} />
-                        <CalDateBtn text=">" buttonClass="rc-next-btn rc-date-btn" action={this.goToNextMonth.bind(this)} />
-                        <h2 className="monthTitle">{this.state.currentMonth.format("MMMM")} <span>{this.state.currentMonth.year()}</span></h2>
+                        <CalDateBtn  buttonClass="rc-prev-btn rc-arrow-left rc-date-btn" 
+                                     action={() => { this.headerNavigation(this.props.options.view).prev() }} />
+                        <CalDateBtn text=">" buttonClass="rc-next-btn rc-date-btn" 
+                                             action={() => { this.headerNavigation(this.props.options.view).next() }} />
+                        <h2 className="monthTitle">{dateHeaderFormat}</h2>
                     </div>
                     <div className="right-align-flex-row">
                         <button onClick={() => this.props.viewAction("day") }>Day</button>
