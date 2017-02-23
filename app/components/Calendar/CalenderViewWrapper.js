@@ -117,10 +117,14 @@ export default class CalendarViewWrapper extends React.Component {
                 let numberOfDays = moment(start).daysInMonth();
                 for (let i = firstDate; i <= firstDate + 6; i++){ dateArr.push(i); }
                 if(dateArr.indexOf(numberOfDays) === -1){
-                    return <span>{this.state.currentWeek.format("MMM")} {dateArr[0]} &#8212; {dateArr[dateArr.length-1]}</span>;                    
+                    return <span>{this.state.currentWeek.format("MMM")} {dateArr[0]} &#8212; {dateArr[dateArr.length-1]}, {this.state.currentWeek.format("YYYY")}</span>;                    
                 }
                 else{
-                    return <span>{this.state.currentWeek.format("MMM")} {dateArr[0]} &#8212; { endDate.format("MMM") } { endDate.date() }</span>;   
+                    if(this.state.currentWeek.format("YYYY") !== endDate.format("YYYY")){
+                        return <span>{this.state.currentWeek.format("MMM")} {dateArr[0]}, {this.state.currentWeek.format("YYYY")} &#8212; { endDate.format("MMM") } { endDate.date() }, {endDate.format("YYYY")} </span>;   
+                    }else{
+                        return <span>{this.state.currentWeek.format("MMM")} {dateArr[0]} &#8212; { endDate.format("MMM") } { endDate.date() }, {this.state.currentWeek.format("YYYY")} </span>;                           
+                    }
                 }
             case 'month':
                 return <span>{this.state.currentMonth.format("MMMM")} <span>{this.state.currentMonth.year()}</span></span>;
