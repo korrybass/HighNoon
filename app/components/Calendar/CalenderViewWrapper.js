@@ -103,7 +103,7 @@ export default class CalendarViewWrapper extends React.Component {
 
   getView(view){
     let viewObject = {
-      day: <DailyView/>,
+      day: <DailyView start={this.state.currentDay} />,
       week: <Week start={this.state.currentWeek} />,
       month: <div className="rc-cal-monthly">{this.state.displayDates}</div>
     };
