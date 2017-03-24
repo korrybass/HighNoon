@@ -186,7 +186,10 @@ button{
 
 }
 
-.rc-arrow-left:before{
+.rc-arrow-left{
+    position: relative;
+}
+.rc-arrow-left button:before{
     content: "\A";
     border-style: solid;
     border-width: 4px 6px 4px 0;

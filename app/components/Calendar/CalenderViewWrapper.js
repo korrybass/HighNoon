@@ -16,6 +16,7 @@ export default class CalendarViewWrapper extends React.Component {
     this.state = {
       currentMonth: moment(),
       currentWeek: moment().startOf('isoWeek'),
+      currentDay: moment(),
       displayDates: [],
       currentDragElement: null,
       eventSource: events
@@ -74,28 +75,32 @@ export default class CalendarViewWrapper extends React.Component {
     let events = this.state.eventSource;
     events.forEach((x) => { x['id'] = uuid() });
 
-    return monthData.dates.map(function (x, idx) {
+    return monthData.dates.map((x, idx) => {
       let dateEvents = events.filter((y) => { if(y.date.date() === x.date.date() && y.date.month() === x.date.month() && y.date.year() === x.date.year()) { return true; } });
-      dateEvents = dateEvents.sort(function (a, b) { return a.date._d - b.date._d});
+      dateEvents = dateEvents.sort( (a, b) => { return a.date._d - b.date._d});
       let dayClass = (idx <= monthData.meta.prevIdx) ? "prev-month-day" : (idx >= monthData.meta.nextIdx) ? 'next-month-day' : "";
       return <Day dndActions={dndActions} events={dateEvents} className={'rc-day ' + dayClass} key={idx} rcDate={x.date} dayNumber={x.day} />;
     });
   };
+
   goToPrevMonth () {
     this.setState({
       currentMonth: calUtils.getPreviousMonth(this.state.currentMonth),
       displayDates: this.divideArray(this.generateMonthlyDate(calUtils.getPreviousMonth(this.state.currentMonth)), 7)
     });
   }
+
   goToNextMonth () {
     this.setState({
       currentMonth: calUtils.getNextMonth(this.state.currentMonth),
       displayDates: this.divideArray(this.generateMonthlyDate(calUtils.getNextMonth(this.state.currentMonth)), 7)
     });
   }
+
   componentDidMount () {
     this.setState({displayDates: this.divideArray(this.generateMonthlyDate(this.state.currentMonth), 7) })
   }
+
   getView(view){
     let viewObject = {
       day: <DailyView/>,
@@ -104,6 +109,7 @@ export default class CalendarViewWrapper extends React.Component {
     };
     return viewObject[view];
   }
+
   formatHeaderDate (){
     switch(this.props.options.view){
       case 'day': 
@@ -144,9 +150,23 @@ export default class CalendarViewWrapper extends React.Component {
       currentWeek: start
     })
   }
+
+  goToNextDay(){
+      let day = moment(this.state.currentDay).add(1, 'day');
+      this.setState({ currentDay:  day});
+  };
+  
+  goToPrevDay () {
+    let day = moment(this.state.currentDay).subtract(1, 'day');
+    this.setState({ currentDay:  day});
+  }
+
   headerNavigation (type){
     var actions = {
-      day: {},
+      day: {
+        next: this.goToNextDay.bind(this),
+        prev: this.goToPrevDay.bind(this),
+      },
       week: {
         next: this.goToNextWeek.bind(this),
         prev: this.goToPrevWeek.bind(this),
@@ -162,6 +182,7 @@ export default class CalendarViewWrapper extends React.Component {
   render() {
     let view = this.getView(this.props.options.view);
     let dateHeaderFormat = this.formatHeaderDate();
+    console.log(this.props )
     //---------
     //create a component for the header of the calendar
     //--------------------------
