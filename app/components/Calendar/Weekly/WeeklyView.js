@@ -33,9 +33,10 @@ export default class Week extends React.Component {
         return position;
     }
 
-    generateWeeklyEventElement (dayOfWeek){
+    generateWeeklyEventElement (dayOfWeek, dates){
+        dates = dates.map((x) => x.date)
         return mockTimes.map((x, idx) => {
-            if(moment(x.start).day() === dayOfWeek){
+            if(moment(x.start).day() === dayOfWeek && dates.indexOf(moment().date()) > -1){
                return <div className={"rc-weekly-event"} key={idx} style={{top: this.calculateEventPositionToPixels(x) }}>
                     <p className={"title"}>{x.title}</p>
                 </div>
@@ -96,13 +97,13 @@ export default class Week extends React.Component {
         }
         return timeDivs;
     }
-    buildWeeklyDayCols (){
+    buildWeeklyDayCols (dates){
         let timeDivs = [];
         let dayClass;
         for (let i = 1; i <= 7; i++){
             timeDivs.push(<td key={i} className="rc-weekly-day-col">
                 <div  ref={"day-column"+i} onClick={(e) => { this.onDayColClick(e, i)}} className="rc-col-eventwrapper" style={{height: "1008px", marginBottom: "-1008px"}}>
-                   {this.generateWeeklyEventElement(i)}
+                   {this.generateWeeklyEventElement(i, dates)}
                 </div>
             </td>);
         }
@@ -157,7 +158,7 @@ export default class Week extends React.Component {
                             <td style={{width: "60px"}}>
                                 {this.buildWeeklyTimes().map(function (x) { return x; })}
                             </td>
-                            {this.buildWeeklyDayCols().map(function (x) { return x; })}
+                            {this.buildWeeklyDayCols(dates).map(function (x) { return x; })}
                         </tr>
                         </tbody>
                     </table>
