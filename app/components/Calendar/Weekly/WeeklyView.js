@@ -1,5 +1,5 @@
 import React from 'react';
-import {timeDivMap } from './timeMap';
+import {timeDivMap } from '../timeMap';
 import moment from 'moment';
 
 const mockTimes = [
@@ -74,7 +74,7 @@ export default class Week extends React.Component {
 
     componentDidMount (){
         window.addEventListener("resize",  () => {
-            console.log('resizing', this);
+            // console.log('resizing', this);
         })
     };
     buildWeeklyTimes (){
