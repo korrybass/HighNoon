@@ -35,8 +35,9 @@ export default class Week extends React.Component {
 
   generateWeeklyEventElement (dayOfWeek, dates){
     dates = dates.map((x) => x.date)
+    // remove mockTimes
     return mockTimes.map((x, idx) => {
-      if(moment(x.start).day() === dayOfWeek && dates.indexOf(moment().date()) > -1){
+      if(moment(x.start).day() === dayOfWeek && dates.indexOf(moment().date()) > -1 ){
         return (
           <div className={"rc-weekly-event"} key={idx} style={{top: this.calculateEventPositionToPixels(x) }}>
             <p className={"title"}>{x.title}</p>

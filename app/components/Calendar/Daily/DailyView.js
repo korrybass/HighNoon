@@ -3,10 +3,57 @@ import moment from 'moment';
 import {timeDivMap } from '../timeMap';
 
 
+const mockTimes = [
+    {
+        start: moment(),
+        end: moment().minute(60),
+        title: "Time of schedule" 
+    },
+    {
+        start: moment().add(3, 'hours'),
+        end: moment().add(17, "minutes"),
+        title: "Second time"
+    }
+];
+
 export default class DailyView extends React.Component {
 
-  buildDailyCols(){
-    return <div> </div>;
+  buildDailyCols(dates){
+    return (
+      <div  key={1} ref={"daily-day-column-1"} onClick={(e) => { this.onDayColClick(e, 'daily-day-column-1')}} className="rc-col-eventwrapper" style={{height: "1008px"}}>
+          {this.generateWeeklyEventElement(this.props.start.day(), dates)}
+        </div>
+    );
+  }
+
+  generateWeeklyEventElement (dayOfWeek, dates){
+    dates = dates.map((x) => x.date)
+    // remove mockTimes
+   
+    return mockTimes.map((x, idx) => {
+      if(moment(x.start).day() === dayOfWeek && dates.indexOf(moment().date()) > -1 && this.props.start.month() === x.start.month() ){
+        return (
+          <div className={"rc-weekly-event"} key={idx} style={{top: this.calculateEventPositionToPixels(x) }}>
+            <p className={"title"}>{x.title}</p>
+          </div>
+        )
+      }
+    })
+  };
+
+  calculateEventPositionToPixels (event) {
+    let startingHour = moment(event.start).hours();
+    let startingMinutes = moment(event.start).minutes();
+    let position = (startingHour * 60 + startingMinutes) * 0.7;
+    return position;
+  }
+
+  onDayColClick (e, ref){
+    let eventPosY = e.clientY - e.target.offsetTop + this.refs['weeklyWrapper'].scrollTop;
+    let elem = this.refs[ref];
+    let nearestMultiple = Math.round(eventPosY / 21) * 21;
+    let events = [...this.state.newEvents, {start: null, position: nearestMultiple}];
+    this.setState({newEvents: events});
   }
   
   buildDailySlots (){
