@@ -5,7 +5,7 @@ import moment from 'moment';
 const mockTimes = [
     {
         start: moment(),
-        end: moment().minute(30),
+        end: moment().add(30, 'minutes'),
         title: "Time of schedule" 
     },
     {
@@ -38,8 +38,10 @@ export default class Week extends React.Component {
     // remove mockTimes
     return mockTimes.map((x, idx) => {
       if(moment(x.start).day() === dayOfWeek && dates.indexOf(moment().date()) > -1 ){
+          let diff = x.end.diff(x.start)
+          diff = diff/1000 / 60;
         return (
-          <div className={"rc-weekly-event"} key={idx} style={{top: this.calculateEventPositionToPixels(x) }}>
+          <div className={"rc-weekly-event"} key={idx} style={{top: this.calculateEventPositionToPixels(x), height: diff * 0.7 }}>
             <p className={"title"}>{x.title}</p>
           </div>
         )
