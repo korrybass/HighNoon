@@ -127,12 +127,9 @@ export default class CalendarViewWrapper extends React.Component {
         }
         else{
           if(this.state.currentWeek.format("YYYY") !== endDate.format("YYYY")){
-            debugger
             return <span>{this.state.currentWeek.format("MMM")} {dateArr[0]}, {this.state.currentWeek.format("YYYY")} &#8212; { endDate.format("MMM") } { endDate.date() }, {endDate.format("YYYY")} </span>;   
           }
           else{
-            endDate
-            debugger
             return <span>{this.state.currentWeek.format("MMM")} {dateArr[0]} &#8212; { endDate.format("MMM") } { endDate.date() }, {this.state.currentWeek.format("YYYY")} </span>;                           
           }
         }
