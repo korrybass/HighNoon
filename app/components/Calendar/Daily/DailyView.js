@@ -116,7 +116,7 @@ export default class DailyView extends React.Component {
                 <td style={{width: "60px"}}>
                   {this.buildTimeSlots().map( (x) => { return x; })}
                 </td>
-                <td>
+                <td className="rc-weekly-day-col">
                   {this.buildDailyCols(dates)}
                 </td>
               </tr>
