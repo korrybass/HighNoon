@@ -42,6 +42,7 @@ export default class Week extends React.Component {
           diff = diff/1000 / 60;
         return (
           <div className={"rc-weekly-event"} key={idx} style={{top: this.calculateEventPositionToPixels(x), height: diff * 0.7 }}>
+            
             <p className={"title"}>{x.title}</p>
           </div>
         )
@@ -109,7 +110,7 @@ export default class Week extends React.Component {
   buildWeeklyDayCols (dates){
     let timeDivs = [];
     let dayClass;
-    for (let i = 1; i <= 7; i++){
+    for (let i = 0; i <= 6; i++){
       timeDivs.push(
         <td key={i} className="rc-weekly-day-col">
           <div  ref={"day-column"+i} onClick={(e) => { this.onDayColClick(e, i)}} className="rc-col-eventwrapper" style={{height: "1008px", marginBottom: "-1008px"}}>

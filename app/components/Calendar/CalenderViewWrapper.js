@@ -115,20 +115,24 @@ export default class CalendarViewWrapper extends React.Component {
       case 'day': 
         break;
       case 'week':
-        let start = this.state.currentWeek || moment().startOf('isoWeek');
+        let start = this.state.currentWeek.startOf('isoWeek') || moment().startOf('isoWeek');
         let endDate = moment(this.state.currentWeek ).endOf('isoWeek');
         let firstDate = (start.date() === 1) ? start.date() : start.date()-1;
         let dateArr = [];
         let numberOfDays = moment(start).daysInMonth();
+          endDate = (endDate.date() === numberOfDays) ? endDate : moment(endDate).subtract(1, 'day')
         for (let i = firstDate; i <= firstDate + 6; i++){ dateArr.push(i); }
         if(dateArr.indexOf(numberOfDays) === -1){
           return <span>{this.state.currentWeek.format("MMM")} {dateArr[0]} &#8212; {dateArr[dateArr.length-1]}, {this.state.currentWeek.format("YYYY")}</span>;                    
         }
         else{
           if(this.state.currentWeek.format("YYYY") !== endDate.format("YYYY")){
+            debugger
             return <span>{this.state.currentWeek.format("MMM")} {dateArr[0]}, {this.state.currentWeek.format("YYYY")} &#8212; { endDate.format("MMM") } { endDate.date() }, {endDate.format("YYYY")} </span>;   
           }
           else{
+            endDate
+            debugger
             return <span>{this.state.currentWeek.format("MMM")} {dateArr[0]} &#8212; { endDate.format("MMM") } { endDate.date() }, {this.state.currentWeek.format("YYYY")} </span>;                           
           }
         }
