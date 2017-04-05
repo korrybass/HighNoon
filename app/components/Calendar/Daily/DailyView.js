@@ -92,7 +92,7 @@ export default class DailyView extends React.Component {
              <tbody>
                <tr>
                 <td style={{width: "60px"}}>&nbsp;</td>
-                <td className="rc-day-col"> {moment(dates[0].dateObj).format('dddd') }  {dates[0].month}/{dates[0].date}</td>
+                <td className="rc-day-col"> </td>
                 <td style={{width: "10px"}}>&nbsp;</td>
               </tr>
             </tbody>

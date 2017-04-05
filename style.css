@@ -188,13 +188,27 @@ button{
 
 .rc-arrow-left{
     position: relative;
+    width: 25px;
+    height: 25px;
 }
-.rc-arrow-left button:before{
+.rc-arrow-left .arr-icon:before{
     content: "\A";
     border-style: solid;
     border-width: 4px 6px 4px 0;
-    border-color: transparent #dd4397 transparent transparent;
+    border-color: transparent #FF5722 transparent transparent;
     position: absolute;
+    top: 9px;
+    left: 9px;
+}
+
+.rc-arrow-right .arr-icon:before{
+    content: "\A";
+    border-style: solid;
+    border-width: 4px 6px 4px 0;
+    border-color: transparent #FF5722 transparent transparent;
+    position: absolute;
+    top: 9px;
+    left: 9px;
 }
 
 .rc-weekly-event{
