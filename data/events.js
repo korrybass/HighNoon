@@ -22,12 +22,12 @@ export let events = [
         title: "First Event"
     },
     {
-        date: moment().day(5).hour(4),
-        title: "Second Event"
+        date: moment().day(2).hour(4),
+        title: "Other Event"
     },
     {
         date: moment().day(5).hour(22),
-        title: "Third Event"
+        title: "Other Third Event"
     },
     {
         date: moment().day(5).hour(22),

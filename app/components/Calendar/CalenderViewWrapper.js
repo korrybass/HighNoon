@@ -38,7 +38,7 @@ export default class CalendarViewWrapper extends React.Component {
             <table className="rc-event-table">
               <tbody>
                 <tr>{temp.map((x, idx) => <td key={idx} className="day-number"> {x.props.dayNumber}</td>)}</tr>
-                <tr> { temp.map((x) => {return x;}) }</tr>
+                <tr> { temp.map((x) => { return x; }) }</tr>
               </tbody>
             </table>
           </div>
@@ -109,17 +109,26 @@ export default class CalendarViewWrapper extends React.Component {
     };
     return viewObject[view];
   }
-
+  
+  dailyDates (date){
+    let start = date || moment();
+    let dateArr = [];
+    var date = {month: start.month() + 1, date: start.date(), year: start.year(),dateObj: start};
+    dateArr.push(date);
+    return dateArr;
+  };
   formatHeaderDate (){
     switch(this.props.options.view){
-      case 'day': 
-        break;
+      case 'day':
+        let dates = this.dailyDates(this.state.currentDay);
+        return <span>{moment(dates[0].dateObj).format('dddd') }  {dates[0].month}/{dates[0].date}/{dates[0].year}</span>
       case 'week':
-        let start = this.state.currentWeek || moment().startOf('isoWeek');
+        let start = this.state.currentWeek.startOf('isoWeek') || moment().startOf('isoWeek');
         let endDate = moment(this.state.currentWeek ).endOf('isoWeek');
         let firstDate = (start.date() === 1) ? start.date() : start.date()-1;
         let dateArr = [];
         let numberOfDays = moment(start).daysInMonth();
+          endDate = (endDate.date() === numberOfDays) ? endDate : moment(endDate).subtract(1, 'day')
         for (let i = firstDate; i <= firstDate + 6; i++){ dateArr.push(i); }
         if(dateArr.indexOf(numberOfDays) === -1){
           return <span>{this.state.currentWeek.format("MMM")} {dateArr[0]} &#8212; {dateArr[dateArr.length-1]}, {this.state.currentWeek.format("YYYY")}</span>;                    
@@ -191,8 +200,10 @@ export default class CalendarViewWrapper extends React.Component {
         <p>Calendar</p>
         <div className="calendar-header center-align-flex-row">
           <div className="calendar-btns center-align-flex-row">
-            <CalDateBtn  buttonClass="rc-prev-btn rc-arrow-left rc-date-btn" 
-            action={() => { this.headerNavigation(this.props.options.view).prev() }} />
+            <button className="rc-arrow-left rc-prev-btn rc-date-btn" 
+            onClick={() => { this.headerNavigation(this.props.options.view).prev() }}> 
+              <div className="arr-icon"></div>
+            </ button>
             <CalDateBtn text=">" buttonClass="rc-next-btn rc-date-btn" 
             action={() => { this.headerNavigation(this.props.options.view).next() }} />
             <h2 className="monthTitle">{dateHeaderFormat}</h2>

@@ -5,12 +5,17 @@ import moment from 'moment';
 const mockTimes = [
     {
         start: moment(),
-        end: moment().add(30, 'minutes'),
+        end: moment().add(100, 'minutes'),
         title: "Time of schedule" 
     },
     {
         start: moment().add(3, 'hours'),
         end: moment().add(17, "minutes"),
+        title: "Second time"
+    },
+    {
+        start: moment().hour(23).minute(0),
+        end: moment().hour(23).add(100, "minutes"),
         title: "Second time"
     }
 ];
@@ -41,7 +46,8 @@ export default class Week extends React.Component {
           let diff = x.end.diff(x.start)
           diff = diff/1000 / 60;
         return (
-          <div className={"rc-weekly-event"} key={idx} style={{top: this.calculateEventPositionToPixels(x), height: diff * 0.7 }}>
+          <div className={"rc-weekly-event"} key={idx} style={{top: this.calculateEventPositionToPixels(x), height: diff * 0.7+"px" }}>
+            
             <p className={"title"}>{x.title}</p>
           </div>
         )
@@ -109,7 +115,7 @@ export default class Week extends React.Component {
   buildWeeklyDayCols (dates){
     let timeDivs = [];
     let dayClass;
-    for (let i = 1; i <= 7; i++){
+    for (let i = 0; i <= 6; i++){
       timeDivs.push(
         <td key={i} className="rc-weekly-day-col">
           <div  ref={"day-column"+i} onClick={(e) => { this.onDayColClick(e, i)}} className="rc-col-eventwrapper" style={{height: "1008px", marginBottom: "-1008px"}}>
