@@ -1,6 +1,7 @@
 import React from 'react';
 import {timeDivMap } from '../timeMap';
 import moment from 'moment';
+import Event from '../Event/rc-event';
 
 const mockTimes = [
     {
@@ -46,7 +47,11 @@ export default class Week extends React.Component {
           let diff = x.end.diff(x.start)
           diff = diff/1000 / 60;
         return (
-          <div className={"rc-weekly-event"} key={idx} style={{top: this.calculateEventPositionToPixels(x), height: diff * 0.7+"px" }}>
+          <div 
+            draggable='true'
+            ref="rc-event"
+            onDragStart={ () => { this.props.dndActions.dragAction(x.start) } }
+            className={"rc-weekly-event"} key={idx} style={{top: this.calculateEventPositionToPixels(x), height: diff * 0.7+"px" }}>
             
             <p className={"title"}>{x.title}</p>
           </div>
@@ -97,7 +102,7 @@ export default class Week extends React.Component {
     });
   };
   findEventPosition (hour){   
-    return hourIndex * 21;
+    return hour * 21;
   };
 
   buildWeeklySlots (){

@@ -4,9 +4,9 @@ import Week from './Weekly/WeeklyView';
 import DailyView from './Daily/DailyView';
 import CalDateBtn from './nextBtn';
 import moment from 'moment';
-import calUtils from '../../../logic/CalendarMonthLogic';
-import {events} from '../../../data/events';
-import {uuid} from '../../../helper/uuid';
+import calUtils from '../../logic/CalendarMonthLogic';
+import {events} from '../../data/events';
+import {uuid} from '../../helper/uuid';
 
 
 export default class CalendarViewWrapper extends React.Component {
@@ -27,8 +27,9 @@ export default class CalendarViewWrapper extends React.Component {
     let temp = [];
     return arr.map((x, idx) => {
       temp.push(x);
+      var rowElem;
       if(((idx + 1) % divisor === 0)){
-        var rowElem = (
+         rowElem = (
           <div key={idx} className="rc-month-row">
             <table className="bg-grid-table">
               <tbody>
@@ -44,8 +45,9 @@ export default class CalendarViewWrapper extends React.Component {
           </div>
         );
         temp = [];
-        return rowElem;
+        // return rowElem;
       }
+      return rowElem;
     })
   }
 
@@ -62,11 +64,17 @@ export default class CalendarViewWrapper extends React.Component {
       displayDates: this.divideArray(this.generateMonthlyDate(this.state.currentMonth), 7)
     });
   }
+  dndActions() {
+    return {
+      dragAction: this.setCurrentDragItem.bind(this),
+      dropAction: this.getCurrentDragItem.bind(this)
+    }
+  }
   generateMonthlyDate (date) {
     let monthData = calUtils.setMonthDatesView(date);
-    const dayAction = (date) => {
-      console.log("evt date >>", this.state.eventSource);
-    };
+    // const dayAction = (date) => {
+    //   console.log("evt date >>", this.state.eventSource);
+    // };
     const dndActions = {
       dragAction: this.setCurrentDragItem.bind(this),
       dropAction: this.getCurrentDragItem.bind(this)
@@ -74,13 +82,12 @@ export default class CalendarViewWrapper extends React.Component {
 
     let events = this.state.eventSource;
     events.forEach((x) => { x['id'] = uuid() });
-
     return monthData.dates.map((x, idx) => {
-      let dateEvents = events.filter((y) => { if(y.date.date() === x.date.date() && y.date.month() === x.date.month() && y.date.year() === x.date.year()) { return true; } });
+      let dateEvents = events.filter((y) => { return y.date.date() === x.date.date() && y.date.month() === x.date.month() && y.date.year() === x.date.year(); });
       dateEvents = dateEvents.sort( (a, b) => { return a.date._d - b.date._d});
       let dayClass = (idx <= monthData.meta.prevIdx) ? "prev-month-day" : (idx >= monthData.meta.nextIdx) ? 'next-month-day' : "";
-      return <Day dndActions={dndActions} events={dateEvents} className={'rc-day ' + dayClass} key={idx} rcDate={x.date} dayNumber={x.day} />;
-    });
+      return <Day dndActions={this.dndActions()} events={dateEvents} className={'rc-day ' + dayClass} key={idx} rcDate={x.date} dayNumber={x.day} />;
+    }, this);
   };
 
   goToPrevMonth () {
@@ -104,7 +111,7 @@ export default class CalendarViewWrapper extends React.Component {
   getView(view){
     let viewObject = {
       day: <DailyView start={this.state.currentDay} />,
-      week: <Week start={this.state.currentWeek} />,
+      week: <Week dndActions={ this.dndActions() } start={this.state.currentWeek} />,
       month: <div className="rc-cal-monthly">{this.state.displayDates}</div>
     };
     return viewObject[view];
@@ -113,8 +120,8 @@ export default class CalendarViewWrapper extends React.Component {
   dailyDates (date){
     let start = date || moment();
     let dateArr = [];
-    var date = {month: start.month() + 1, date: start.date(), year: start.year(),dateObj: start};
-    dateArr.push(date);
+    var formattedDate = {month: start.month() + 1, date: start.date(), year: start.year(),dateObj: start};
+    dateArr.push(formattedDate);
     return dateArr;
   };
   formatHeaderDate (){
@@ -143,6 +150,8 @@ export default class CalendarViewWrapper extends React.Component {
         }
       case 'month':
         return <span>{this.state.currentMonth.format("MMMM")} <span>{this.state.currentMonth.year()}</span></span>;
+      default:
+        return <span></span>
     }
   }
 

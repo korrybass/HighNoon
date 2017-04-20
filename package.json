@@ -1,41 +1,19 @@
 {
-  "name": "gulpjs6react",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Korry Bass",
-  "license": "ISC",
+  "name": "HighNoon",
+  "version": "0.1.0",
+  "private": true,
   "devDependencies": {
-    "babel-eslint": "^6.1.2",
-    "babel-plugin-transform-react-jsx": "^6.8.0",
-    "babel-preset-es2015": "6.3.13",
-    "babel-preset-react": "6.3.13",
-    "babel-preset-stage-0": "^6.16.0",
-    "babelify": "7.2.0",
-    "browserify": "12.0.1",
-    "eslint": "^3.12.2",
-    "eslint-plugin-react": "^6.8.0",
-    "gulp": "^3.9.1",
-    "gulp-eslint": "^3.0.1",
-    "gulp-jasmine": "^2.4.2",
-    "gulp-util": "3.0.7",
-    "karma": "^1.3.0",
-    "karma-babel-preprocessor": "^6.0.1",
-    "karma-browserify": "^5.1.0",
-    "karma-chrome-launcher": "^2.0.0",
-    "karma-jasmine": "^1.1.0",
-    "karma-phantomjs-launcher": "^1.0.2",
-    "karma-react-jsx-preprocessor": "^0.1.1",
-    "react-tools": "^0.13.3",
-    "vinyl-source-stream": "1.1.0",
-    "watchify": "^3.8.0"
+    "react-scripts": "0.9.5"
   },
   "dependencies": {
-    "moment": "^2.17.1",
-    "react": "0.14.5",
-    "react-dom": "0.14.5"
+    "moment": "^2.18.1",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
   }
 }

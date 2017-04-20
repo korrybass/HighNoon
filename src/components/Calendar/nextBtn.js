@@ -1,5 +1,5 @@
 import React from 'react';
-import calUtils from '../../../logic/CalendarMonthLogic';
+import calUtils from '../../logic/CalendarMonthLogic';
 
 export default class CalDateBtn extends React.Component {
     constructor() {

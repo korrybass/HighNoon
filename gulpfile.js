@@ -6,14 +6,22 @@ var babelify = require('babelify');
 const eslint = require('gulp-eslint');
 const jasmine = require('gulp-jasmine');
 var Server = require('karma').Server;
-
+var livereload = require('gulp-livereload');
+var webserver = require('gulp-server-livereload');
+var opn = require('opn');
 
 var dependencies = ['react', 'react-dom'];
 
 var scriptsCount = 0;
 
+var server = {
+  host: 'localhost',
+  port: '9999'
+}
+
 gulp.task('scripts', function () {
     bundleApp(false);
+
 });
 
 gulp.task('deploy', function (){
@@ -21,6 +29,7 @@ gulp.task('deploy', function (){
 });
 
 gulp.task('watch', function () {
+	// livereload.listen();
 	gulp.watch(['app/**/*.js'], ['scripts']);
 });
 
@@ -41,7 +50,15 @@ gulp.task('lint', () => {
 		.pipe(eslint.failAfterError());
 });
 
-gulp.task('default', ['scripts', 'watch']);
+// gulp.task('default', ['scripts', 'watch']);
+
+var buildTasks = ['scripts'];
+
+gulp.task('default', ['scripts', 'webserver', 'watch' ]);
+
+gulp.task('openbrowser', function() {
+  opn( 'http://' + server.host + ':' + server.port );
+});
 
 function bundleApp(isProduction) {
 	scriptsCount++;
@@ -58,7 +75,8 @@ function bundleApp(isProduction) {
 			.bundle()
 			.on('error', gutil.log)
 			.pipe(source('vendors.js'))
-			.pipe(gulp.dest('./web/js/'));
+			.pipe(gulp.dest('./web/js/'))
+			// .pipe(livereload());
   	}
   	if (!isProduction){
   		dependencies.forEach(function(dep){
@@ -73,3 +91,14 @@ function bundleApp(isProduction) {
 	    .pipe(source('bundle.js'))
 	    .pipe(gulp.dest('./web/js/'));
 }
+
+gulp.task('webserver', function() {
+  gulp.src( './' )
+    .pipe(webserver({
+      host:             server.host,
+      port:             server.port,
+      livereload:       false,
+      directoryListing: false,
+			open: true
+    }));
+});
