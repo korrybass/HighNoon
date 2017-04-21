@@ -213,8 +213,12 @@ export default class CalendarViewWrapper extends React.Component {
             onClick={() => { this.headerNavigation(this.props.options.view).prev() }}> 
               <div className="arr-icon"></div>
             </ button>
-            <CalDateBtn text=">" buttonClass="rc-next-btn rc-date-btn" 
-            action={() => { this.headerNavigation(this.props.options.view).next() }} />
+
+            <button className="rc-arrow-right rc-next-btn rc-date-btn" 
+            onClick={() => { this.headerNavigation(this.props.options.view).next() }}> 
+              <div className="arr-icon"></div>
+            </ button>
+            
             <h2 className="monthTitle">{dateHeaderFormat}</h2>
           </div>
           <div className="right-align-flex-row">
