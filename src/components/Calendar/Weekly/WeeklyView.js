@@ -15,9 +15,9 @@ const mockTimes = [
         title: "Second time"
     },
     {
-        start: moment().hour(23).minute(0),
-        end: moment().hour(23).add(100, "minutes"),
-        title: "Second time"
+        start: moment().hour(18).minute(0),
+        end: moment().hour(18).add(100, "minutes"),
+        title: "Third time"
     }
 ];
 
@@ -27,9 +27,14 @@ export default class Week extends React.Component {
     this.state = {
       viewHeight: "400px",
       newEvent: null,
-      eventDataSource: [],
-      newEvents: [],
-      currentHoveredElement: null
+      eventDataSource: [
+        {
+        start: moment(),
+        end: moment().add(100, 'minutes'),
+        title: "Time of schedule" 
+    }
+      ],
+      newEvents: []
     };
   }
 
@@ -40,33 +45,50 @@ export default class Week extends React.Component {
     return position;
   }
 
-  onDrag(e) {
-    console.log(this, e.clientY, e.clientY - this.currentHoveredElement.offsetTop * 0.7   );
-    // console.log(e.target);
-    // console.log(this.state.currentHoveredElement);
-    // console.dir( this.refs[this.currentHoveredElement] )
+  convertPixelsToMinutes (pixels){
+    return pixels / 0.7;
+  }
+
+  onDrag(e, item, idx) {
+    let tableScroll = this.refs['weekly-table-ref'].scrollTop;
+    if(this.currentHoveredElement){
+      let adjMousePosition = e.clientY - this.currentHoveredElement.offsetTop +  tableScroll;
+      let originalPosition = this.calculateEventPositionToPixels(item)
+      // console.log(originalPosition, adjMousePosition);
+      let startPrev30mins = item.start.subtract(30, 'minutes');
+      let endPrev30mins = item.end.subtract(30, 'minutes');
+      let next30mins = item.start.add(30, 'minutes')
+      if(adjMousePosition < originalPosition){
+        let updatedEvents = this.state.eventDataSource.slice();
+        updatedEvents[idx].start = startPrev30mins;
+        updatedEvents[idx].end = endPrev30mins;
+
+        this.setState({ eventDataSource: updatedEvents });
+      }
+    }
+    
   }
   onDragEnter(e, ref) {
-    console.log('entered element', ref);
+    // console.log('entered element', ref);
     // console.dir( this.refs[ref] );
     this.currentHoveredElement = this.refs[ref];
-    
   }
 
   generateWeeklyEventElement (dayOfWeek, dates){
     dates = dates.map((x) => x.date)
     // remove mockTimes
-    return mockTimes.map((x, idx) => {
+    return this.state.eventDataSource.map((x, idx) => {
       if(moment(x.start).day() === dayOfWeek && dates.indexOf(moment().date()) > -1 ){
           let diff = x.end.diff(x.start)
           diff = diff/1000 / 60;
         return (
           <div 
             draggable='true'
-            onDrag={ (e) => { this.onDrag(e, x) }}
+            onDrag={ (e) => { this.onDrag(e, x, idx) }}
             ref="rc-event"
             onDragStart={ () => { this.props.dndActions.dragAction(x.start); }}
-            className={"rc-weekly-event"} key={idx} style={{ top: this.calculateEventPositionToPixels(x), height: diff * 0.7+"px" }}>
+            className={"rc-weekly-event"} 
+            key={idx} style={{ top: this.calculateEventPositionToPixels(x), height: diff * 0.7+"px" }}>
             
             <p className={"title"}>{x.title}</p>
           </div>
@@ -89,8 +111,7 @@ export default class Week extends React.Component {
         return {month: start.month() + 1, date: x};
       })
     }
-    else
-    {
+    else{
       let startHead = dateArr.slice(0, dateArr.indexOf(numberOfDays)+1);
       startHead = startHead.map((x) => { return {month: start.month() + 1, date: x} })
       let tailLength = dateArr.slice(dateArr.indexOf(numberOfDays)+1);
@@ -140,8 +161,7 @@ export default class Week extends React.Component {
         <td key={i} className="rc-weekly-day-col">
           <div  ref={"day-column"+i} onClick={(e) => { this.onDayColClick(e, i)}} 
             className="rc-col-eventwrapper" 
-            ref={'weekly-col-ref-'+i}
-            onDragEnter={ (e) => { this.onDragEnter(e, 'weekly-col-ref-'+i); }}
+            onDragEnter={ (e) => { this.onDragEnter(e, 'day-column'+i); }}
             style={{height: "1008px", marginBottom: "-1008px"}}>
             {this.generateWeeklyEventElement(i, dates)}
           </div>
@@ -181,7 +201,7 @@ export default class Week extends React.Component {
             </tbody>
           </table>
         </div>
-        <div style={viewHeight} ref="weeklyWrapper" className="rc-weekly-table-wrapper">
+        <div style={viewHeight} ref="weeklyWrapper" ref="weekly-table-ref" className="rc-weekly-table-wrapper">
           <table  className="rc-weekly-table">
             <tbody>
               <tr height="1">
