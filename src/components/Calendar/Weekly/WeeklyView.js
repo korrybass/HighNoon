@@ -28,7 +28,8 @@ export default class Week extends React.Component {
       viewHeight: "400px",
       newEvent: null,
       eventDataSource: [],
-      newEvents: []
+      newEvents: [],
+      currentHoveredElement: null
     };
   }
 
@@ -37,6 +38,19 @@ export default class Week extends React.Component {
     let startingMinutes = moment(event.start).minutes();
     let position = (startingHour * 60 + startingMinutes) * 0.7;
     return position;
+  }
+
+  onDrag(e) {
+    console.log(this, e.clientY, e.clientY - this.currentHoveredElement.offsetTop * 0.7   );
+    // console.log(e.target);
+    // console.log(this.state.currentHoveredElement);
+    // console.dir( this.refs[this.currentHoveredElement] )
+  }
+  onDragEnter(e, ref) {
+    console.log('entered element', ref);
+    // console.dir( this.refs[ref] );
+    this.currentHoveredElement = this.refs[ref];
+    
   }
 
   generateWeeklyEventElement (dayOfWeek, dates){
@@ -49,9 +63,10 @@ export default class Week extends React.Component {
         return (
           <div 
             draggable='true'
+            onDrag={ (e) => { this.onDrag(e, x) }}
             ref="rc-event"
-            onDragStart={ () => { this.props.dndActions.dragAction(x.start) } }
-            className={"rc-weekly-event"} key={idx} style={{top: this.calculateEventPositionToPixels(x), height: diff * 0.7+"px" }}>
+            onDragStart={ () => { this.props.dndActions.dragAction(x.start); }}
+            className={"rc-weekly-event"} key={idx} style={{ top: this.calculateEventPositionToPixels(x), height: diff * 0.7+"px" }}>
             
             <p className={"title"}>{x.title}</p>
           </div>
@@ -123,9 +138,13 @@ export default class Week extends React.Component {
     for (let i = 0; i <= 6; i++){
       timeDivs.push(
         <td key={i} className="rc-weekly-day-col">
-          <div  ref={"day-column"+i} onClick={(e) => { this.onDayColClick(e, i)}} className="rc-col-eventwrapper" style={{height: "1008px", marginBottom: "-1008px"}}>
-          {this.generateWeeklyEventElement(i, dates)}
-        </div>
+          <div  ref={"day-column"+i} onClick={(e) => { this.onDayColClick(e, i)}} 
+            className="rc-col-eventwrapper" 
+            ref={'weekly-col-ref-'+i}
+            onDragEnter={ (e) => { this.onDragEnter(e, 'weekly-col-ref-'+i); }}
+            style={{height: "1008px", marginBottom: "-1008px"}}>
+            {this.generateWeeklyEventElement(i, dates)}
+          </div>
         </td>
       );
     }
