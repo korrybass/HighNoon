@@ -50,20 +50,27 @@ export default class Week extends React.Component {
   }
 
   onDrag(e, item, idx) {
+
     let tableScroll = this.refs['weekly-table-ref'].scrollTop;
     if(this.currentHoveredElement){
       let adjMousePosition = e.clientY - this.currentHoveredElement.offsetTop +  tableScroll;
       let originalPosition = this.calculateEventPositionToPixels(item)
-      // console.log(originalPosition, adjMousePosition);
-      let startPrev30mins = item.start.subtract(30, 'minutes');
-      let endPrev30mins = item.end.subtract(30, 'minutes');
-      let next30mins = item.start.add(30, 'minutes')
-      if(adjMousePosition < originalPosition){
-        let updatedEvents = this.state.eventDataSource.slice();
+      
+      if(adjMousePosition - 50 < originalPosition){
+        let startPrev30mins = item.start.subtract(30, 'minutes');
+        let endPrev30mins = item.end.subtract(30, 'minutes');
+        let updatedEvents = [...this.state.eventDataSource];
         updatedEvents[idx].start = startPrev30mins;
         updatedEvents[idx].end = endPrev30mins;
-
         this.setState({ eventDataSource: updatedEvents });
+      }
+      else{
+        let startNext30mins = item.start.add(30, 'minutes');
+        let endNext30mins = item.end.add(30, 'minutes');
+        // let updatedEvents = [...this.state.eventDataSource];
+        // updatedEvents[idx].start = startNext30mins;
+        // updatedEvents[idx].end = endNext30mins;
+        // this.setState({ eventDataSource: updatedEvents });
       }
     }
     
@@ -182,6 +189,7 @@ export default class Week extends React.Component {
   render() {
     let viewHeight = { height: "400px" };
     let dates = this.getWeeklyDates();
+    console.log(this.state.eventDataSource);
     return (
       <div className="rc-weekly-wrapper">
         <div>

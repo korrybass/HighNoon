@@ -200,7 +200,6 @@ export default class CalendarViewWrapper extends React.Component {
   render() {
     let view = this.getView(this.props.options.view);
     let dateHeaderFormat = this.formatHeaderDate();
-    console.log(this.props )
     //---------
     //create a component for the header of the calendar
     //--------------------------
