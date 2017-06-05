@@ -186,12 +186,27 @@ button{
 
 }
 
-.rc-arrow-left:before{
-    content: "\A";
-    border-style: solid;
-    border-width: 4px 6px 4px 0;
-    border-color: transparent #dd4397 transparent transparent;
-    position: absolute;
+.rc-arrow-left, .rc-arrow-right{
+    position: relative;
+    width: 25px;
+    height: 25px;
+}
+
+.rc-arrow-left .arr-icon{
+  width: 0; 
+  height: 0; 
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent; 
+  
+  border-right:6px solid #828282;
+}
+
+.rc-arrow-right .arr-icon{
+  width: 0; 
+  height: 0; 
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-left: 6px solid #828282;
 }
 
 .rc-weekly-event{
