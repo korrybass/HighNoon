@@ -29,10 +29,10 @@ export default class Week extends React.Component {
       newEvent: null,
       eventDataSource: [
         {
-        start: moment(),
-        end: moment().add(100, 'minutes'),
-        title: "Time of schedule" 
-    }
+          start: moment(),
+          end: moment().add(100, 'minutes'),
+          title: "Time of schedule" 
+        }
       ],
       newEvents: []
     };
@@ -55,8 +55,9 @@ export default class Week extends React.Component {
     if(this.currentHoveredElement){
       let adjMousePosition = e.clientY - this.currentHoveredElement.offsetTop +  tableScroll;
       let originalPosition = this.calculateEventPositionToPixels(item)
-      
       if(adjMousePosition - 50 < originalPosition){
+
+        console.dir( this.currentHoveredElement);
         let startPrev30mins = item.start.subtract(30, 'minutes');
         let endPrev30mins = item.end.subtract(30, 'minutes');
         let updatedEvents = [...this.state.eventDataSource];
@@ -75,10 +76,12 @@ export default class Week extends React.Component {
     }
     
   }
-  onDragEnter(e, ref) {
+  onDragEnter(e, ref, dayOfWeek) {
+    // console.log(ref)
     // console.log('entered element', ref);
     // console.dir( this.refs[ref] );
-    this.currentHoveredElement = this.refs[ref];
+    console.log('set new col')
+    this.currentHoveredElement = {elem: this.refs[ref], weekDay: dayOfWeek};
   }
 
   generateWeeklyEventElement (dayOfWeek, dates){
@@ -168,7 +171,7 @@ export default class Week extends React.Component {
         <td key={i} className="rc-weekly-day-col">
           <div  ref={"day-column"+i} onClick={(e) => { this.onDayColClick(e, i)}} 
             className="rc-col-eventwrapper" 
-            onDragEnter={ (e) => { this.onDragEnter(e, 'day-column'+i); }}
+            onDragEnter={ (e) => { this.onDragEnter(e, 'day-column'+i, i); }}
             style={{height: "1008px", marginBottom: "-1008px"}}>
             {this.generateWeeklyEventElement(i, dates)}
           </div>
@@ -189,7 +192,7 @@ export default class Week extends React.Component {
   render() {
     let viewHeight = { height: "400px" };
     let dates = this.getWeeklyDates();
-    console.log(this.state.eventDataSource);
+    // console.log(this.state.eventDataSource);
     return (
       <div className="rc-weekly-wrapper">
         <div>
