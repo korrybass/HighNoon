@@ -2,7 +2,6 @@ import React from 'react';
 import Day from './Day/day';
 import Week from './Weekly/WeeklyView';
 import DailyView from './Daily/DailyView';
-import CalDateBtn from './nextBtn';
 import moment from 'moment';
 import calUtils from '../../logic/CalendarMonthLogic';
 import {events} from '../../data/events';
@@ -15,7 +14,7 @@ export default class CalendarViewWrapper extends React.Component {
 
     this.state = {
       currentMonth: moment(),
-      currentWeek: moment().startOf('isoWeek'),
+      currentWeek: moment().startOf('week'),
       currentDay: moment(),
       displayDates: [],
       currentDragElement: null,
@@ -72,13 +71,6 @@ export default class CalendarViewWrapper extends React.Component {
   }
   generateMonthlyDate (date) {
     let monthData = calUtils.setMonthDatesView(date);
-    // const dayAction = (date) => {
-    //   console.log("evt date >>", this.state.eventSource);
-    // };
-    const dndActions = {
-      dragAction: this.setCurrentDragItem.bind(this),
-      dropAction: this.getCurrentDragItem.bind(this)
-    };
 
     let events = this.state.eventSource;
     events.forEach((x) => { x['id'] = uuid() });
@@ -128,42 +120,38 @@ export default class CalendarViewWrapper extends React.Component {
     switch(this.props.options.view){
       case 'day':
         let dates = this.dailyDates(this.state.currentDay);
-        return <span>{moment(dates[0].dateObj).format('dddd') }  {dates[0].month}/{dates[0].date}/{dates[0].year}</span>
+        return (
+          <span>{moment(dates[0].dateObj).format('dddd') }  {dates[0].month}/{dates[0].date}/{dates[0].year}</span>
+        )
       case 'week':
-        let start = this.state.currentWeek.startOf('isoWeek') || moment().startOf('isoWeek');
-        let endDate = moment(this.state.currentWeek ).endOf('isoWeek');
-        let firstDate = (start.date() === 1) ? start.date() : start.date()-1;
-        let dateArr = [];
-        let numberOfDays = moment(start).daysInMonth();
-          endDate = (endDate.date() === numberOfDays) ? endDate : moment(endDate).subtract(1, 'day')
-        for (let i = firstDate; i <= firstDate + 6; i++){ dateArr.push(i); }
-        if(dateArr.indexOf(numberOfDays) === -1){
-          return <span>{this.state.currentWeek.format("MMM")} {dateArr[0]} &#8212; {dateArr[dateArr.length-1]}, {this.state.currentWeek.format("YYYY")}</span>;                    
-        }
-        else{
-          if(this.state.currentWeek.format("YYYY") !== endDate.format("YYYY")){
-            return <span>{this.state.currentWeek.format("MMM")} {dateArr[0]}, {this.state.currentWeek.format("YYYY")} &#8212; { endDate.format("MMM") } { endDate.date() }, {endDate.format("YYYY")} </span>;   
-          }
-          else{
-            return <span>{this.state.currentWeek.format("MMM")} {dateArr[0]} &#8212; { endDate.format("MMM") } { endDate.date() }, {this.state.currentWeek.format("YYYY")} </span>;                           
-          }
-        }
+        let start = this.state.currentWeek.startOf('week') || moment().startOf('week');
+        let end = moment(this.state.currentWeek ).endOf('week');
+        let isDiffYear = start.format("YYYY") !== end.format("YYYY")
+        const splitYear = isDiffYear ? start.format("YYYY") : ''
+        const startDate = isDiffYear ? `${start.format("MMM D, YYYY")}` : start.format('MMM D')
+        const endDate = `${end.format("MMM D, YYYY")}`
+        return <span>{startDate} &#8212; {endDate}</span>;
       case 'month':
-        return <span>{this.state.currentMonth.format("MMMM")} <span>{this.state.currentMonth.year()}</span></span>;
+        return (
+          <span>
+            {this.state.currentMonth.format("MMMM")}
+            <span>{this.state.currentMonth.year()}</span>
+          </span>
+        );
       default:
         return <span></span>
     }
   }
 
   goToNextWeek () {
-    let start = moment(this.state.currentWeek).add(1, 'weeks').startOf('isoWeek');
+    let start = moment(this.state.currentWeek).add(1, 'weeks').startOf('week');
     this.setState({
       currentWeek: start
     })
   }
 
   goToPrevWeek () {
-    let start = moment(this.state.currentWeek).subtract(1, 'weeks').startOf('isoWeek');
+    let start = moment(this.state.currentWeek).subtract(1, 'weeks').startOf('week');
     this.setState({
       currentWeek: start
     })

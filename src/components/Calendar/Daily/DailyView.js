@@ -31,13 +31,12 @@ export default class DailyView extends React.Component {
     // remove mockTimes
    
     return mockTimes.map((x, idx) => {
-      if(moment(x.start).day() === dayOfWeek && dates.indexOf(moment().date()) > -1 && this.props.start.month() === x.start.month() ){
-        return (
+        return moment(x.start).day() === dayOfWeek && dates.indexOf(moment().date()) > -1 && this.props.start.month() === x.start.month() && 
+        (
           <div className={"rc-weekly-event"} key={idx} style={{top: this.calculateEventPositionToPixels(x) }}>
             <p className={"title"}>{x.title}</p>
           </div>
         )
-      }
     })
   };
 
@@ -50,7 +49,7 @@ export default class DailyView extends React.Component {
 
   onDayColClick (e, ref){
     let eventPosY = e.clientY - e.target.offsetTop + this.refs['weeklyWrapper'].scrollTop;
-    let elem = this.refs[ref];
+    // let elem = this.refs[ref];
     let nearestMultiple = Math.round(eventPosY / 21) * 21;
     let events = [...this.state.newEvents, {start: null, position: nearestMultiple}];
     this.setState({newEvents: events});

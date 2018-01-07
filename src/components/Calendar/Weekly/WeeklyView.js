@@ -1,7 +1,7 @@
 import React from 'react';
 import {timeDivMap } from '../timeMap';
 import moment from 'moment';
-import Event from '../Event/rc-event';
+// import Event from '../Event/rc-event';
 
 const mockTimes = [
     {
@@ -80,7 +80,6 @@ export default class Week extends React.Component {
     // console.log(ref)
     // console.log('entered element', ref);
     // console.dir( this.refs[ref] );
-    console.log('set new col')
     this.currentHoveredElement = {elem: this.refs[ref], weekDay: dayOfWeek};
   }
 

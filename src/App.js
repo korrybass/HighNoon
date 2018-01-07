@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Calendar from './components/Calendar/CalendarContainer';
+import './App.scss';
 
 //==========for testing only======
 let options = {
