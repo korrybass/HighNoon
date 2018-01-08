@@ -50,30 +50,31 @@ export default class Week extends React.Component {
   }
 
   onDrag(e, item, idx) {
-
     let tableScroll = this.refs['weekly-table-ref'].scrollTop;
-    if(this.currentHoveredElement){
-      let adjMousePosition = e.clientY - this.currentHoveredElement.offsetTop +  tableScroll;
-      let originalPosition = this.calculateEventPositionToPixels(item)
-      if(adjMousePosition - 50 < originalPosition){
+    const itemCopy = { ...item }
+    // let updatedEvents = [...this.state.eventDataSource];
 
-        console.dir( this.currentHoveredElement);
-        let startPrev30mins = item.start.subtract(30, 'minutes');
-        let endPrev30mins = item.end.subtract(30, 'minutes');
-        let updatedEvents = [...this.state.eventDataSource];
-        updatedEvents[idx].start = startPrev30mins;
-        updatedEvents[idx].end = endPrev30mins;
-        this.setState({ eventDataSource: updatedEvents });
-      }
-      else{
-        let startNext30mins = item.start.add(30, 'minutes');
-        let endNext30mins = item.end.add(30, 'minutes');
-        // let updatedEvents = [...this.state.eventDataSource];
-        // updatedEvents[idx].start = startNext30mins;
-        // updatedEvents[idx].end = endNext30mins;
-        // this.setState({ eventDataSource: updatedEvents });
-      }
-    }
+    // if(this.currentHoveredElement) {
+    //   let adjMousePosition = e.clientY - this.currentHoveredElement.elem.offsetTop +  tableScroll;
+    //   let originalPosition = this.calculateEventPositionToPixels(itemCopy)
+    //   if(adjMousePosition - 50 < originalPosition){
+    //     let startPrev30mins = itemCopy.start.subtract(30, 'minutes');
+    //     let endPrev30mins = itemCopy.end.subtract(30, 'minutes');
+
+    //   }
+    //   else {
+    //     let startNext30mins = itemCopy.start.add(30, 'minutes');
+    //     let endNext30mins = itemCopy.end.add(30, 'minutes');
+    //     // let updatedEvents = [...this.state.eventDataSource];
+    //     // updatedEvents[idx].start = startNext30mins;
+    //     // updatedEvents[idx].end = endNext30mins;
+    //     // this.setState({ eventDataSource: updatedEvents });
+    //   }
+
+    //   updatedEvents[idx].start = startPrev30mins;
+    //   updatedEvents[idx].end = endPrev30mins;
+    //   this.setState({ eventDataSource: updatedEvents });
+    // }
     
   }
   onDragEnter(e, ref, dayOfWeek) {
@@ -107,13 +108,13 @@ export default class Week extends React.Component {
   };
   
   getWeeklyDates (){
-    let start = this.props.start || moment().startOf('isoWeek');
-    let endDate = moment(this.props.start).endOf('isoWeek');
-    let firstDate = (start.date() === 1) ? start.date() : start.date()-1;
+    let start = this.props.start || moment().startOf('week');
+    let endDate = moment(this.props.start).endOf('week');
+    let firstDate = start.date();
     let limit = firstDate + 6;
     let dateArr = [];
-
     let numberOfDays = moment(start).daysInMonth();
+
     for (let i = firstDate; i <= limit; i++){ dateArr.push(i); }
     if(dateArr.indexOf(numberOfDays) === -1){
       dateArr = dateArr.map((x) => {
@@ -181,7 +182,7 @@ export default class Week extends React.Component {
   }
   
   onDayColClick (e, ref){
-    let eventPosY = e.clientY - e.target.offsetTop + this.refs['weeklyWrapper'].scrollTop;
+    let eventPosY = e.clientY - e.target.offsetTop + this.refs['weekly-table-ref'].scrollTop;
     let elem = this.refs[ref];
     let nearestMultiple = Math.round(eventPosY / 21) * 21;
     let events = [...this.state.newEvents, {start: null, position: nearestMultiple}];
@@ -211,7 +212,7 @@ export default class Week extends React.Component {
             </tbody>
           </table>
         </div>
-        <div style={viewHeight} ref="weeklyWrapper" ref="weekly-table-ref" className="rc-weekly-table-wrapper">
+        <div style={viewHeight} ref="weekly-table-ref" className="rc-weekly-table-wrapper">
           <table  className="rc-weekly-table">
             <tbody>
               <tr height="1">
